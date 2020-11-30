@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <script src="https://kit.fontawesome.com/f454bd2555.js" crossorigin="anonymous"></script>
+
+  <title>Library</title>
+</head>
+
+<body>
+
+  <div class="site">
+
+    <!-- title and navigation -->
+    <div class="page-title">
+      <div class="title">
+        <img class="logo" src="images/books.svg">
+        <h1>Bookw<span>o</span>rms</h1>
+        <div class="nav">
+          <a href="#">link</a>
+          <a href="#">link</a>
+          <img class="profile" src="images/profile image.svg">
+        </div>
+      </div>
+    </div>
+
+    <!-- sidebar -->
+    <aside class="sidebar">
+      <div class="info">
+        <h2>My Library</h2>
+        <ul class="book-data">
+          <li>Reading now</li>
+          <li>To read</li>
+          <li>Already read</li>
+          <li>My favorites</li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- library content -->
+    <main class="main-content">
+      <div class="main-area">
+        <div class="book-grid">
+
+          <!--Add new book card-->
+          <div class="card new-book">
+            <div class="add-book">
+              <div class="tooltip">
+                <button class="add-new-book">
+                  <i class="material-icons md-36">library_add</i>
+                </button>
+                <div class="tooltipbox">
+                  <p class="add-tooltip">Add Book</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- book cards -->
+          <div class="card">
+            <div class="card-into-container">
+
+              <!-- card image -->
+              <div class="card-img">
+                <img src="images/books.jpg" />
+              </div>
+
+              <!-- card info -->
+              <div class="book-info">
+                <p class="book-title">The Russia House</p>
+                <p class="author"> by John le Carre</p>
+                <p class="pages">256 pages</p>
+              </div>
+
+              <!-- card buttons -->
+              <div class="book-status">
+
+                <div class="tooltip">
+                  <button class="btn read"><i class="fas fa-book"></i></button>
+                  <div class="tooltipbox">
+                    <p>Already read</p>
+                  </div>
+                </div>
+
+                <div class="tooltip">
+                  <button class="btn favorite"><i class="fas fa-book-reader"></i></button>
+                  <div class="tooltipbox">
+                    <p>Reading now</p>
+                  </div>
+                </div>
+
+                <div class="tooltip">
+                  <button class="btn favorite"><i class="fas fa-heart"></i></button>
+                  <div class="tooltipbox">
+                    <p>Mark favorite</p>
+                  </div>
+                </div>
+
+                <div class="tooltip">
+                  <button class="btn favorite"><i class="fas fa-trash-alt"></i></button>
+                  <div class="tooltipbox">
+                    <p>Remove book</p>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+
+
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="signed">
+        <p>Designed by Rhiannon Dove</p>
+      </div>
+    </footer>
+
+  </div>
+
+
+  <script src="script.js"></script>
+</body>
+
+</html>
