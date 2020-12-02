@@ -16,7 +16,10 @@ const addBookToLibrary = (event) => {
     author: inputAuthor,
     pages: inputPages,
     read: inputRead,
+    favorite: false,
+    reading_now: false,
   };
+  
   library.push(book);
   localStorage.setItem("libraryBooks", JSON.stringify(library));
   document.querySelector("form").reset();
@@ -29,19 +32,17 @@ const addBookToLibrary = (event) => {
 
 const openForm = () => {
   siteOverlay.style.visibility = "visible";
-  formPopup.style.visibility = "visible";
-  formPopup.style.zIndex = "10";
-  siteOverlay.style.zIndex = "9";
+  formPopup.style.display = "flex";
+  siteOverlay.style.zIndex = "2";
 };
 
 // Close form
 
 const closeForm = (event) => {
   event.preventDefault();
-  siteOverlay.style.visibility = "hidden";
-  formPopup.style.visibility = "hidden";
-  formPopup.zIndex = "-1";
   siteOverlay.style.zIndex = "-1";
+  siteOverlay.style.visibility = "hidden";
+  formPopup.style.display = "none";
 };
 
 // Selectors for the form
@@ -64,121 +65,103 @@ closeNewBookForm.addEventListener("click", closeForm);
 
 const bookGrid = document.querySelector("#book-grid");
 
+const createCardImage = () => {
+  const imageContainer = document.createElement("div");
+  imageContainer.className = "card-img";
+  const img = document.createElement("img");
+  img.src = "images/books.jpg";
+  imageContainer.append(img);
+
+  return imageContainer;
+};
+
+const createCardInfo = (title, author, pages) => {
+  const bookInfoContainer = document.createElement("div");
+  bookInfoContainer.className = "book-info";
+  const bookMetaData = [
+    { heading: title, cssClass: "book-title" },
+    { heading: author, cssClass: "author" },
+    { heading: pages, cssClass: "pages" },
+  ];
+
+  for (let bookMetaDataItem of bookMetaData) {
+    let newMetaItem = document.createElement("p");
+    newMetaItem.textContent = bookMetaDataItem.heading;
+    newMetaItem.className = bookMetaDataItem.cssClass;
+
+    bookInfoContainer.appendChild(newMetaItem);
+  }
+
+  return bookInfoContainer;
+};
+
+
+const createCardButtons = () => {
+  const bookStatus = document.createElement("div");
+  bookStatus.className = "book-status";
+  
+  let cardButtons = [
+    {
+      iconClass: "fas fa-book",
+      tooltipText: "Already read",
+    },
+    {
+      iconClass: "fas fa-book-reader",
+      tooltipText: "Reading now",
+    },
+    {
+      iconClass: "fas fa-heart",
+      tooltipText: "Mark favorite",
+    },
+    {
+      iconClass: "fas fa-trash-alt",
+      tooltipText: "Remove book",
+    },
+  ];
+
+  for (let cardButton of cardButtons) {
+    let tooltip = document.createElement("div");
+    tooltip.className = "tooltip";
+    bookStatus.appendChild(tooltip);
+   
+    
+    let button = document.createElement("button");
+    button.className = "btn favorite";
+    tooltip.appendChild(button);
+    
+    let buttonIcon = document.createElement("i");
+    buttonIcon.className = cardButton.iconClass;
+    button.appendChild(buttonIcon);
+    
+    let tooltipBox = document.createElement("div");
+    tooltipBox.className = "tooltipbox";
+    tooltip.appendChild(tooltipBox);
+    
+    let toolText = document.createElement("p");
+    toolText.textContent = cardButton.tooltipText;
+    tooltipBox.appendChild(toolText); 
+  }
+
+  return bookStatus;
+};
+
 const createCard = (book) => {
+  // creates new card
   const card = document.createElement("div");
   card.className = "card card-into-container";
 
   // adds image
-  const imgContainer = document.createElement("div");
-  imgContainer.className = "card-img";
-  const img = document.createElement("img");
-  img.src = "images/books.jpg";
-
-  card.append(imgContainer);
-  imgContainer.append(img);
+  card.append(createCardImage());
 
   // adds book info
 
-  const bookInfo = document.createElement("div");
-  bookInfo.className = "book-info";
-  const bookTitle = document.createElement("p");
-  bookTitle.className = "book-title";
-  bookTitle.textContent = book.title;
-  const bookAuthor = document.createElement("p");
-  bookAuthor.className = "author";
-  bookAuthor.textContent = book.author;
-  const bookPages = document.createElement("p");
-  bookPages.className = "pages";
-  bookPages.textContent = book.pages;
-
-  card.append(bookInfo);
-  bookInfo.append(bookTitle);
-  bookInfo.append(bookAuthor);
-  bookInfo.append(bookPages);
+  card.append(createCardInfo(book.title, book.author, book.pages));
 
   // adds card status
 
-  const bookStatus = document.createElement("div");
-  bookStatus.className = "book-status";
-
-  const tooltipRead = document.createElement("div");
-  tooltipRead.className = "tooltip";
-  const btnRead = document.createElement("button");
-  btnRead.className = "btn read";
-  const readIcon = document.createElement("i");
-  readIcon.className = "fas fa-book";
-  const tooltipBox = document.createElement("div");
-  tooltipBox.className = "tooltipbox";
-  const tooltipText = document.createElement("p");
-  tooltipText.textContent = "Already read";
-
-  card.append(bookStatus);
-  bookStatus.append(tooltipRead);
-  tooltipRead.append(btnRead);
-  btnRead.append(readIcon);
-  tooltipRead.append(tooltipBox);
-  tooltipBox.append(tooltipText);
-
-  const tooltipReading = document.createElement("div");
-  tooltipReading.className = "tooltip";
-  const btnReading = document.createElement("button");
-  btnReading.className = "btn favorite";
-  const readingIcon = document.createElement("i");
-  readingIcon.className = "fas fa-book-reader";
-  const tooltipBoxReading = document.createElement("div");
-  tooltipBoxReading.className = "tooltipbox";
-  const tooltipTextReading = document.createElement("p");
-  tooltipTextReading.textContent = "Reading Now";
-
-  bookStatus.append(tooltipReading);
-  tooltipReading.append(btnReading);
-  btnReading.append(readingIcon);
-  tooltipReading.append(tooltipBoxReading);
-  tooltipBoxReading.append(tooltipTextReading);
-
-  const tooltipFav = document.createElement("div");
-  tooltipFav.className = "tooltip";
-  const btnFav = document.createElement("button");
-  btnFav.className = "btn favorite";
-  const favIcon = document.createElement("i");
-  favIcon.className = "fas fa-heart";
-  const tooltipBoxFav = document.createElement("div");
-  tooltipBoxFav.className = "tooltipbox";
-  const tooltipTextFav = document.createElement("p");
-  tooltipTextFav.textContent = "Favorite";
-
-  bookStatus.append(tooltipFav);
-  tooltipFav.append(btnFav);
-  btnFav.append(favIcon);
-  tooltipFav.append(tooltipBoxFav);
-  tooltipBoxFav.append(tooltipTextFav);
-
-  const tooltipDel = document.createElement("div");
-  tooltipDel.className = "tooltip";
-  const btnDel = document.createElement("button");
-  btnDel.className = "btn favorite";
-  const delIcon = document.createElement("i");
-  delIcon.className = "fas fa-trash-alt";
-  const tooltipBoxDel = document.createElement("div");
-  tooltipBoxDel.className = "tooltipbox";
-  const tooltipTextDel = document.createElement("p");
-  tooltipTextDel.textContent = "Remove book";
-
-  bookStatus.append(tooltipDel);
-  tooltipDel.append(btnDel);
-  btnDel.append(delIcon);
-  tooltipDel.append(tooltipBoxDel);
-  tooltipBoxDel.append(tooltipTextDel);
+  card.append(createCardButtons());
 
   return card;
 };
 
-const createImageContainer = () => {
-  const imageContainer = document.createElement("div");
-  imageContainer.className = "card card-into-container";
-  const img = document.createElement("img");
-  img.src = "images/books.jpg";
-  imgContainer.append(img);
-  
-  return imageContainer;
-}
+
