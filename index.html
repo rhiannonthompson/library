@@ -17,6 +17,53 @@
 
 <body>
 
+  <div class="form-popup">
+
+    <form action="" method="get" class="book-form" autocomplete="off">
+      <div class="form-row">
+        <button class="close-form-btn"><i class="far fa-times-circle"></i></button>
+      </div>
+      <div class="form-row">
+        <label for="title">Title</label>
+        <input id="title" name="title" type="text" />
+      </div>
+
+      <div class="form-row">
+        <label for="author">Author</label>
+        <input id="author" name="author" type="text" />
+      </div>
+
+      <div class="form-row">
+        <label for="pages">Number of pages</label>
+        <input id="pages" name="pages" type="number" min="1" max="1,000,000" />
+      </div>
+
+      <fieldset class="legacy-form-row">
+        <legend>Have you read this book?</legend>
+
+        <input id="choice-one" name="read" type="radio" value="true" />
+        <label for="read" class="radio-label">
+          Yes
+        </label>
+
+        <input id="choice-two" name="read" type="radio" value="false" checked />
+        <label for="not-read" class="radio-label">
+          No
+        </label>
+
+      </fieldset>
+
+      <div class="form-row">
+        <button class="add-book-btn">Add Book</button>
+      </div>
+
+    </form>
+
+  </div>
+
+  <div class="site-overlay">
+
+  </div>
   <div class="site">
 
     <!-- title and navigation -->
@@ -48,7 +95,7 @@
     <!-- library content -->
     <main class="main-content">
       <div class="main-area">
-        <div class="book-grid">
+        <div class="book-grid" id="book-grid">
 
           <!--Add new book card-->
           <div class="card new-book">
@@ -64,59 +111,6 @@
             </div>
           </div>
 
-          <!-- book cards -->
-          <div class="card">
-            <div class="card-into-container">
-
-              <!-- card image -->
-              <div class="card-img">
-                <img src="images/books.jpg" />
-              </div>
-
-              <!-- card info -->
-              <div class="book-info">
-                <p class="book-title">The Russia House</p>
-                <p class="author"> by John le Carre</p>
-                <p class="pages">256 pages</p>
-              </div>
-
-              <!-- card buttons -->
-              <div class="book-status">
-
-                <div class="tooltip">
-                  <button class="btn read"><i class="fas fa-book"></i></button>
-                  <div class="tooltipbox">
-                    <p>Already read</p>
-                  </div>
-                </div>
-
-                <div class="tooltip">
-                  <button class="btn favorite"><i class="fas fa-book-reader"></i></button>
-                  <div class="tooltipbox">
-                    <p>Reading now</p>
-                  </div>
-                </div>
-
-                <div class="tooltip">
-                  <button class="btn favorite"><i class="fas fa-heart"></i></button>
-                  <div class="tooltipbox">
-                    <p>Mark favorite</p>
-                  </div>
-                </div>
-
-                <div class="tooltip">
-                  <button class="btn favorite"><i class="fas fa-trash-alt"></i></button>
-                  <div class="tooltipbox">
-                    <p>Remove book</p>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-          </div>
-
-
-
         </div>
       </div>
     </main>
@@ -128,6 +122,7 @@
     </footer>
 
   </div>
+
 
 
   <script src="script.js"></script>
