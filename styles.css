@@ -299,11 +299,15 @@ h2 {
 .book-data li {
   font-size: 1.2em;
   font-weight: 600;
-  padding: 5px 10px;
+  padding: 2px 10px;
+}
+
+.info-link {
+  background-color: transparent;
 }
 
 .book-data li:hover {
-  background-color: var(--color-orange);
+  background-color: #dd950579;
   cursor: pointer;
 }
 
@@ -322,12 +326,16 @@ h2 {
   height: 100%;
 }
 
+.library-heading {
+  margin-left: 20px;
+}
+
 .book-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(10rem, 100%), 1fr));
   grid-template-rows: repeat(auto-fill, minmax(min(10rem, 100%), 1fr));
   grid-gap: 40px;
-  padding: 80px;
+  padding: 20px 80px;
 }
 
 /*Book Cards*/

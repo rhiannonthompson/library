@@ -86,10 +86,12 @@ const createCard = (book) => {
   card.className = "card card-into-container";
 
   // prevents error when user input is blank
-  // TODO: Create an error message for the user 
+  // TODO: Create an error message for the user
   try {
     card.append(createCardImage());
-    card.append(createCardInfo(book.title, book.author, book.pages));
+    card.append(
+      createCardInfo(book.title, `by ${book.author}`, `${book.pages} pages`)
+    );
     card.append(createCardButtons());
   } catch (error) {
     if (error instanceof TypeError) {
@@ -117,15 +119,16 @@ const LIBRARY = {
       LIBRARY.contents = [];
       LIBRARY.sync();
     }
+    console.log(this.contents);
   },
   sync() {
     let libraryContents = JSON.stringify(LIBRARY.contents);
     localStorage.setItem(LIBRARY.KEY, libraryContents);
   },
 
-  // TODO: Check if book is already in library 
+  // TODO: Check if book is already in library
   find(id) {
-    let match = LIBRARY.contents.filter((items) => {
+    let match = this.contents.filter((items) => {
       if (items.id == id) {
         return true;
       }
@@ -136,7 +139,7 @@ const LIBRARY = {
   },
 
   add(id) {
-    if (LIBRARY.find(id)) {
+    if (this.find(id)) {
       alert("This book is already in your library");
     } else {
       let book = userBookInput();
@@ -144,52 +147,80 @@ const LIBRARY = {
       LIBRARY.sync();
     }
   },
+
+  refine(value) {
+    return this.contents.filter((item) => item[value]);
+  },
 };
 
-const updateDisplay = () => {
-  if(LIBRARY.contents === []) {
-    return;
-  } else {
-    LIBRARY.init();
-  }
-}
-
-updateDisplay();
+LIBRARY.init();
 
 // User input
 
-const isEmpty = (string) => {
+class Book {
+  constructor(
+    id,
+    title,
+    author,
+    pages,
+    read,
+    favorite,
+    reading_now,
+    want_to_read
+  ) {
+    this.id = id;
+    this.title = title;
+    this.author = author;
+    this.pages = pages;
+    this.read = read;
+    this.favorite = favorite;
+    this.reading_now = reading_now;
+    this.wantToRead = want_to_read;
+  }
+}
+
+const isEmptyString = (string) => {
   return !string || string.length === 0 || string.trim() === "";
 };
 
+const isEmpty = (number) => {
+  return isNaN(number);
+};
 
 const userInputBook = () => {
   const inputTitle = document.querySelector("#title").value;
   const inputAuthor = document.querySelector("#author").value;
-  const inputPages = document.querySelector("#pages").value;
-  const inputRead = document.querySelector("input[name='read']:checked").value;
+  let inputPages = document.querySelector("#pages").value;
+  let inputRead = document.querySelector("input[name='read']:checked").value;
 
-  switch(true){
-    case isEmpty(inputTitle): 
+  inputPages = parseInt(inputPages);
+  if (inputRead === "true") {
+    inputRead = true;
+  } else {
+    inputRead = false;
+  }
+
+  switch (true) {
+    case isEmptyString(inputTitle):
       alert("Please enter a title");
       break;
-    case isEmpty(inputAuthor):
+    case isEmptyString(inputAuthor):
       alert("Please enter an author");
       break;
     case isEmpty(inputPages):
       alert("Please enter the number of pages");
       break;
     default:
-      // TODO: Turn into a class
-      let book = {
-        id: Date.now(),
-        title: inputTitle,
-        author: inputAuthor,
-        pages: inputPages,
-        read: inputRead,
-        favorite: false,
-        reading_now: false,
-      };
+      book = new Book(
+        Date.now(),
+        inputTitle,
+        inputAuthor,
+        inputPages,
+        inputRead,
+        false,
+        false
+      );
+
       return book;
   }
 };
@@ -201,22 +232,33 @@ const addBookToLibrary = (event) => {
 
   let book = userInputBook();
 
-  LIBRARY.contents.push(book);
-  LIBRARY.sync();
-  document.querySelector("form").reset();
-  
-  // Prevents errors when no user input is blank
-  try {
-    bookGrid.appendChild(createCard(book));
-  } catch(error) {
-    if (error instanceof TypeError) {
-      return;
+  if (!book) {
+    return;
+  } else {
+    LIBRARY.contents.push(book);
+    LIBRARY.sync();
+    document.querySelector("form").reset();
+    // Prevents errors when no user input is blank
+    try {
+      bookGrid.appendChild(createCard(book));
+    } catch (error) {
+      if (error instanceof TypeError) {
+        return;
+      }
     }
-  }  
-  closeForm(event);
+    closeForm(event);
 
-  // TODO Create popup for alert
-  alert(book.title + " was added to your library");
+    // TODO Create popup for alert
+    alert(book.title + " was added to your library");
+  }
+};
+
+// Clear all books from the display
+
+const clearDisplay = () => {
+  while (bookGrid.lastChild.id !== "new-book") {
+    bookGrid.removeChild(bookGrid.lastChild);
+  }
 };
 
 // Open form
@@ -251,3 +293,53 @@ submitForm.addEventListener("click", addBookToLibrary);
 openNewBookForm.addEventListener("click", openForm);
 
 closeNewBookForm.addEventListener("click", closeForm);
+
+// THE SIDEBAR
+
+const allBooks = document.querySelector("#all-book");
+const readingNow = document.querySelector("#now-book");
+const wantToRead = document.querySelector("#want-book");
+const alreadyRead = document.querySelector("#already-book");
+const myFavorites = document.querySelector("#fav-book");
+const libraryHeading = document.querySelector(".library-heading");
+const allSidebarButtons = document.querySelectorAll(".book-data li");
+
+const changeBackgroundColor = (button) => {
+  button.style.backgroundColor = "var(--color-orange)";
+  allSidebarButtons.forEach((item) => {
+    if (item != button) {
+      item.style.removeProperty("background-color");
+    }
+  });
+};
+
+const updateLibraryHeading = (heading) => {
+  libraryHeading.textContent = heading;
+};
+
+const refineDisplay = (value) => {
+  let refinedLibrary = LIBRARY.refine(value);
+  console.log(refinedLibrary);
+  for (let book of refinedLibrary) {
+    bookGrid.appendChild(createCard(book));
+  }
+};
+
+const addEventListenerToButton = (button, value) => {
+  button.addEventListener("click", () => {
+    changeBackgroundColor(button);
+    updateLibraryHeading(button.textContent);
+    clearDisplay();
+    if(!value) {
+      LIBRARY.init();
+    } else {
+    refineDisplay(value);
+    }
+  });
+};
+
+addEventListenerToButton(allBooks);
+addEventListenerToButton(readingNow, "reading_now");
+addEventListenerToButton(wantToRead, "want_to_read");
+addEventListenerToButton(alreadyRead, "read");
+addEventListenerToButton(myFavorites, "favorite");

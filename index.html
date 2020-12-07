@@ -84,10 +84,11 @@
       <div class="info">
         <h2>My Library</h2>
         <ul class="book-data">
-          <li>Reading now</li>
-          <li>Want to read</li>
-          <li>Already read</li>
-          <li>My favorites</li>
+          <li class="info-link" id="all-book">All Books</li>
+          <li class="info-link" id="now-book">Reading Now</li>
+          <li class="info-link" id="want-book">Want to Read</li>
+          <li class="info-link" id="already-book">Already Read</li>
+          <li class="info-link" id="fav-book">My Favorites</li>
         </ul>
       </div>
     </aside>
@@ -95,10 +96,11 @@
     <!-- library content -->
     <main class="main-content">
       <div class="main-area">
+        <h2 class="library-heading">All Books</h2>
         <div class="book-grid" id="book-grid">
 
           <!--Add new book card-->
-          <div class="card new-book">
+          <div class="card new-book" id="new-book">
             <div class="add-book">
               <div class="tooltip">
                 <button class="add-new-book">
