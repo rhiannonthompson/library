@@ -422,11 +422,11 @@ h2 {
 }
 
 .fa-book:hover {
-  color: rgb(47, 95, 17);
+  color: rgb(43, 83, 17);
 }
 
 .fa-book-reader:hover {
-  color: #294b57;
+  color: rgb(23, 66, 114)
 }
 
 .fa-heart:hover {
